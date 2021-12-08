@@ -12,7 +12,7 @@ type VtuberHandler interface {
 	Index(c *gin.Context)
 }
 
-type vtuber struct {}
+type vtuber struct{}
 
 func NewVtuber() VtuberHandler {
 	return &vtuber{}

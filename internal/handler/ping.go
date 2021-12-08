@@ -10,7 +10,7 @@ type PingHandler interface {
 	Show(c *gin.Context)
 }
 
-type ping struct {}
+type ping struct{}
 
 func NewPing() PingHandler {
 	return &ping{}

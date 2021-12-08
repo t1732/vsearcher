@@ -1,6 +1,7 @@
 GOCMD=go
 GOBUILD=$(GOCMD) build
 GOCLEAN=$(GOCMD) clean
+GOFMT=$(GOCMD) fmt
 GOTEST=$(GOCMD) test
 GOGET=$(GOCMD) get
 GOVERSION=$(shell go version)
@@ -15,6 +16,10 @@ CMD=$(BIN)/$(NAME)
 clean:
 	$(GOCLEAN)
 	rm -f $(BIN)
+
+.PHONY: fmt
+fmt:
+	$(GOFMT) ./...
 
 .PHONY: test
 test:

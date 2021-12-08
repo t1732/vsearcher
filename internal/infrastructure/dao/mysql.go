@@ -14,9 +14,9 @@ import (
 type dbConfig struct {
 	Username string
 	Password string
-	Host string
-	Port string
-	DBname string
+	Host     string
+	Port     string
+	DBname   string
 }
 
 var db *gorm.DB
