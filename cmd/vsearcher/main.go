@@ -9,9 +9,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/gin-gonic/gin"
-	"github.com/t1732/vsercher/internal/handler"
 	"github.com/t1732/vsercher/internal/infrastructure/dao"
+	"github.com/t1732/vsercher/internal/routes"
 )
 
 func main() {
@@ -23,10 +22,6 @@ func main() {
 	dao.Migrate()
 	dao.Seed()
 
-	router := gin.Default()
-	router.GET("/ping", handler.NewPing().Show)
-	router.GET("/vtubers", handler.NewVtuber().Index)
-
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
@@ -34,7 +29,7 @@ func main() {
 	log.Println("running gin server " + port + " port")
 	srv := &http.Server{
 		Addr:    ":" + port,
-		Handler: router,
+		Handler: routes.Router(),
 	}
 
 	go func() {
