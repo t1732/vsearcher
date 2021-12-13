@@ -20,6 +20,7 @@ func Router() *gin.Engine {
 	group := router.Group("/vtubers")
 	vh := handler.NewVtuber()
 	group.GET("", vh.Index)
+	group.GET("/:id", vh.Show)
 
 	return router
 }
