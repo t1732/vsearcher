@@ -9,18 +9,18 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/t1732/vsercher/internal/infrastructure/dao"
+	"github.com/t1732/vsercher/internal/infrastructure/dao/mysql"
 	"github.com/t1732/vsercher/internal/routes"
 )
 
 func main() {
-	db, err := dao.NewDB()
+	db, err := mysql.NewConnection()
 	if err != nil {
 		panic(err)
 	}
 	defer db.Close()
-	dao.Migrate()
-	dao.Seed()
+	mysql.Migrate()
+	mysql.Seed()
 
 	port := os.Getenv("PORT")
 	if port == "" {

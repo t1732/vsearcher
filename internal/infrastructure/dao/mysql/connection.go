@@ -1,4 +1,4 @@
-package dao
+package mysql
 
 import (
 	"bytes"
@@ -19,9 +19,9 @@ type dbConfig struct {
 	DBname   string
 }
 
-var db *gorm.DB
+var Connection *gorm.DB
 
-func NewDB() (*sql.DB, error) {
+func NewConnection() (*sql.DB, error) {
 	config := dbConfig{
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASS"),
@@ -40,31 +40,27 @@ func NewDB() (*sql.DB, error) {
 	}
 
 	dsn := b.String()
-	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	Connection, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}
 
-	return db.DB()
-}
-
-func DB() *gorm.DB {
-	return db
+	return Connection.DB()
 }
 
 func Migrate() {
-	db.AutoMigrate(&model.Vtuber{})
+	Connection.AutoMigrate(&model.Vtuber{})
 }
 
 func Seed() {
-	if db.Migrator().HasTable(&model.Vtuber{}) {
-		db.Migrator().DropTable(&model.Vtuber{})
+	if Connection.Migrator().HasTable(&model.Vtuber{}) {
+		Connection.Migrator().DropTable(&model.Vtuber{})
 	}
-	db.Migrator().CreateTable(&model.Vtuber{})
-	db.Create(&model.Vtuber{Name: "キズナアイ"})
-	db.Create(&model.Vtuber{Name: "かしこまり"})
-	db.Create(&model.Vtuber{Name: "おめがシスターズ"})
-	db.Create(&model.Vtuber{Name: "兎田ぺこら"})
-	db.Create(&model.Vtuber{Name: "本間ひまわり"})
-	db.Create(&model.Vtuber{Name: "兎鞠まり"})
+	Connection.Migrator().CreateTable(&model.Vtuber{})
+	Connection.Create(&model.Vtuber{Name: "キズナアイ"})
+	Connection.Create(&model.Vtuber{Name: "かしこまり"})
+	Connection.Create(&model.Vtuber{Name: "おめがシスターズ"})
+	Connection.Create(&model.Vtuber{Name: "兎田ぺこら"})
+	Connection.Create(&model.Vtuber{Name: "本間ひまわり"})
+	Connection.Create(&model.Vtuber{Name: "兎鞠まり"})
 }

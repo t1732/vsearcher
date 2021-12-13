@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/t1732/vsercher/internal/handler"
+	registory "github.com/t1732/vsercher/internal/registry"
 )
 
 func Router() *gin.Engine {
@@ -15,12 +16,14 @@ func Router() *gin.Engine {
 		c.JSON(http.StatusNotFound, gin.H{"message": "Page not found"})
 	})
 
+	repo := registory.NewRepository()
+
 	router.GET("/ping", handler.NewPing().Show)
 
 	group := router.Group("/vtubers")
-	vh := handler.NewVtuber()
-	group.GET("", vh.Index)
-	group.GET("/:id", vh.Show)
+	vtuberHandler := handler.NewVtuber(repo)
+	group.GET("", vtuberHandler.Index)
+	group.GET("/:id", vtuberHandler.Show)
 
 	return router
 }
