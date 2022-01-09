@@ -9,27 +9,31 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/t1732/vsercher/internal/infrastructure/dao/mysql"
-	"github.com/t1732/vsercher/internal/routes"
+	"github.com/t1732/vsercher/internal/config"
+	"github.com/t1732/vsercher/internal/interfaces/routes"
 )
 
 func main() {
-	db, err := mysql.NewConnection()
-	if err != nil {
-		panic(err)
-	}
-	defer db.Close()
-	mysql.Migrate()
-	mysql.Seed()
-
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
 	log.Println("running gin server " + port + " port")
+
+	dbConn, err := config.NewDB()
+	if err != nil {
+		panic(err)
+	}
+
+	sqlDB, err := dbConn.DB()
+	if err != nil {
+		panic(err)
+	}
+	defer sqlDB.Close()
+
 	srv := &http.Server{
 		Addr:    ":" + port,
-		Handler: routes.Router(),
+		Handler: routes.Router(dbConn),
 	}
 
 	go func() {

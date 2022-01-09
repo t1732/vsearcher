@@ -1,4 +1,4 @@
-package handler
+package rest
 
 import (
 	"net/http"
@@ -24,7 +24,7 @@ func NewVtuber(repo registry.Repository) VtuberHandler {
 }
 
 func (v *vtuber) Index(c *gin.Context) {
-	vtuberRepo := v.repo.NewVtuber()
+	vtuberRepo := v.repo.NewVtuberRepository()
 	usecase := usecase.NewVtuber(vtuberRepo)
 	vtubers, err := usecase.Index()
 	if err != nil {
@@ -40,7 +40,7 @@ func (v *vtuber) Show(c *gin.Context) {
 		panic(err)
 	}
 
-	vtuberRepo := v.repo.NewVtuber()
+	vtuberRepo := v.repo.NewVtuberRepository()
 	var vtuber *model.Vtuber
 	usecase := usecase.NewVtuber(vtuberRepo)
 	vtuber, err = usecase.Show(id)

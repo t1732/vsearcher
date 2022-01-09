@@ -4,11 +4,12 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/t1732/vsercher/internal/handler"
+	"github.com/t1732/vsercher/internal/interfaces/handler/rest"
 	registory "github.com/t1732/vsercher/internal/registry"
+	"gorm.io/gorm"
 )
 
-func Router() *gin.Engine {
+func Router(dbConn *gorm.DB) *gin.Engine {
 	router := gin.Default()
 	router.Use(gin.Logger())
 
@@ -16,12 +17,12 @@ func Router() *gin.Engine {
 		c.JSON(http.StatusNotFound, gin.H{"message": "Page not found"})
 	})
 
-	repo := registory.NewRepository()
+	repo := registory.NewRepository(dbConn)
 
-	router.GET("/ping", handler.NewPing().Show)
+	router.GET("/ping", rest.NewPing().Show)
 
 	group := router.Group("/vtubers")
-	vtuberHandler := handler.NewVtuber(repo)
+	vtuberHandler := rest.NewVtuber(repo)
 	group.GET("", vtuberHandler.Index)
 	group.GET("/:id", vtuberHandler.Show)
 

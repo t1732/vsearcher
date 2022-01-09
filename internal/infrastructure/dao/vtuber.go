@@ -1,4 +1,4 @@
-package mysql
+package dao
 
 import (
 	"github.com/t1732/vsercher/internal/domain/model"
@@ -11,16 +11,16 @@ type Vtuber interface {
 }
 
 type vtuberImpl struct {
-	conn *gorm.DB
+	dbConn *gorm.DB
 }
 
-func NewVtuber() Vtuber {
-	return &vtuberImpl{conn: Connection}
+func NewVtuber(dbConn *gorm.DB) Vtuber {
+	return &vtuberImpl{dbConn: dbConn}
 }
 
 func (v *vtuberImpl) All() (*[]model.Vtuber, error) {
 	var vtubers []model.Vtuber
-	result := v.conn.Find(&vtubers)
+	result := v.dbConn.Find(&vtubers)
 
 	if result.Error != nil {
 		return nil, result.Error
@@ -30,7 +30,7 @@ func (v *vtuberImpl) All() (*[]model.Vtuber, error) {
 
 func (v *vtuberImpl) FindById(id int64) (*model.Vtuber, error) {
 	var vtuber model.Vtuber
-	result := v.conn.First(&vtuber, id)
+	result := v.dbConn.First(&vtuber, id)
 
 	if result.Error != nil {
 		return nil, result.Error
