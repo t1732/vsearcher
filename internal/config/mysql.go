@@ -3,11 +3,14 @@ package config
 import (
 	"bytes"
 	"html/template"
+	"log"
 	"os"
+	"time"
 
 	"github.com/t1732/vsercher/internal/domain/model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 type dbConfig struct {
@@ -46,13 +49,39 @@ func NewDB() (*gorm.DB, error) {
 		return nil, err
 	}
 
+	logger, err := newLogger()
+	if err != nil {
+		return nil, err
+	}
+
 	dsn := b.String()
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+		SkipDefaultTransaction: true, // デフォルトのトランザクション機能を無効化
+		PrepareStmt:            true, // プリペアードステートメントキャッシュ有効化
+		Logger:                 logger,
+	})
 	if err != nil {
 		return nil, err
 	}
 
 	return db, nil
+}
+
+func newLogger() (logger.Interface, error) {
+	file, err := os.OpenFile(RootPath+"/log/gorm.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		return nil, err
+	}
+
+	return logger.New(
+		log.New(file, "\r\n", log.LstdFlags|log.Lshortfile),
+		logger.Config{
+			SlowThreshold:             time.Second,
+			LogLevel:                  logger.Info,
+			IgnoreRecordNotFoundError: true,
+			Colorful:                  false,
+		},
+	), nil
 }
 
 func Migrate(conn *gorm.DB) {
