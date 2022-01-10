@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/t1732/vsercher/internal/interfaces/handler/rest"
-	registory "github.com/t1732/vsercher/internal/registry"
+	"github.com/t1732/vsercher/internal/registry"
 	"gorm.io/gorm"
 )
 
@@ -17,7 +17,7 @@ func Router(dbConn *gorm.DB) *gin.Engine {
 		c.JSON(http.StatusNotFound, gin.H{"message": "Page not found"})
 	})
 
-	repo := registory.NewRepository(dbConn)
+	repo := registry.NewRepository(dbConn)
 
 	router.GET("/ping", rest.NewPing().Show)
 

@@ -3,11 +3,10 @@ package config
 import (
 	"bytes"
 	"html/template"
-	"log"
 	"os"
-	"time"
 
-	"github.com/t1732/vsercher/internal/domain/model"
+	"github.com/imdario/mergo"
+	lgg "github.com/t1732/vsercher/internal/config/logger"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -21,17 +20,7 @@ type dbConfig struct {
 	DBname   string
 }
 
-func init() {
-	conn, err := NewDB()
-	if err != nil {
-		panic(err)
-	}
-
-	Migrate(conn)
-	Seed(conn)
-}
-
-func NewDB() (*gorm.DB, error) {
+func NewDB(c lgg.MysqlConfig) (*gorm.DB, error) {
 	dbConfig := dbConfig{
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASS"),
@@ -49,7 +38,17 @@ func NewDB() (*gorm.DB, error) {
 		return nil, err
 	}
 
-	logger, err := newLogger()
+	loggerConfig := lgg.MysqlConfig{
+		IsFile:   false,
+		FilePath: App.RootPath.Join("/log/gorm.log"),
+		LogLevel: logger.Error,
+	}
+
+	if err := mergo.Merge(&loggerConfig, c, mergo.WithOverride); err != nil {
+		return nil, err
+	}
+
+	logger, err := lgg.NewLogger(loggerConfig)
 	if err != nil {
 		return nil, err
 	}
@@ -65,68 +64,4 @@ func NewDB() (*gorm.DB, error) {
 	}
 
 	return db, nil
-}
-
-func newLogger() (logger.Interface, error) {
-	file, err := os.OpenFile(App.RootPath.Join("/log/gorm.log"), os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-	if err != nil {
-		return nil, err
-	}
-
-	return logger.New(
-		log.New(file, "\r\n", log.LstdFlags|log.Lshortfile),
-		logger.Config{
-			SlowThreshold:             time.Second,
-			LogLevel:                  logger.Info,
-			IgnoreRecordNotFoundError: true,
-			Colorful:                  false,
-		},
-	), nil
-}
-
-func Migrate(conn *gorm.DB) {
-	if conn.Migrator().HasTable(&model.Vtuber{}) {
-		conn.Migrator().DropTable(&model.Vtuber{}, &model.Group{}, &model.Membership{})
-	}
-	conn.AutoMigrate(&model.Vtuber{}, &model.Group{}, &model.Membership{})
-}
-
-func Seed(conn *gorm.DB) {
-	conn.Create(&model.Vtuber{Name: "キズナアイ"})
-	conn.Create(&model.Vtuber{Name: "兎鞠まり"})
-	conn.Create(
-		&model.Group{
-			Name: "Re:AcT",
-			Memberships: []model.Membership{
-				{Vtuber: model.Vtuber{Name: "かしこまり"}},
-			},
-		},
-	)
-	conn.Create(
-		&model.Group{
-			Name: "おめがシスターズ",
-			Memberships: []model.Membership{
-				{Vtuber: model.Vtuber{Name: "おめがレイ"}},
-				{Vtuber: model.Vtuber{Name: "おめがリオ"}},
-			},
-		},
-	)
-	conn.Create(
-		&model.Group{
-			Name: "にじさんじ",
-			Memberships: []model.Membership{
-				{Vtuber: model.Vtuber{Name: "月ノ美兎"}},
-				{Vtuber: model.Vtuber{Name: "本間ひまわり"}},
-			},
-		},
-	)
-	conn.Create(
-		&model.Group{
-			Name: "ホロライブ",
-			Memberships: []model.Membership{
-				{Vtuber: model.Vtuber{Name: "ときのそら"}},
-				{Vtuber: model.Vtuber{Name: "兎田ぺこら"}},
-			},
-		},
-	)
 }

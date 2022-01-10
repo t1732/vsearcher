@@ -11,6 +11,8 @@ GOARCH=$(shell go env GOARCH)
 NAME=vsearcher
 BIN=./bin
 CMD=$(BIN)/$(NAME)
+MIGRATE=migrate
+SEED=seed
 
 .PHONY: clean
 clean:
@@ -29,6 +31,8 @@ test:
 build:
 	mkdir -p $(BIN)
 	$(GOBUILD) -o $(CMD) ./cmd/$(NAME)
+	$(GOBUILD) -o $(BIN)/$(MIGRATE) ./cmd/$(MIGRATE)
+	$(GOBUILD) -o $(BIN)/$(SEED) ./cmd/$(SEED)
 
 .PHONY: run
 run: test build

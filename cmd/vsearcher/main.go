@@ -9,8 +9,11 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/t1732/vsercher/internal/config"
+	lgg "github.com/t1732/vsercher/internal/config/logger"
 	"github.com/t1732/vsercher/internal/interfaces/routes"
+	"gorm.io/gorm/logger"
 )
 
 func main() {
@@ -20,7 +23,13 @@ func main() {
 	}
 	log.Println("running gin server " + port + " port")
 
-	dbConn, err := config.NewDB()
+	lgCnf := lgg.MysqlConfig{
+		IsFile:   gin.Mode() == gin.DebugMode,
+	}
+	if (gin.Mode() == gin.DebugMode) {
+		lgCnf.LogLevel = logger.Info
+	}
+	dbConn, err := config.NewDB(lgCnf)
 	if err != nil {
 		panic(err)
 	}
