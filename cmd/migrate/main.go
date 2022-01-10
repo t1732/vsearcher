@@ -22,7 +22,15 @@ func main() {
 	defer sqlDB.Close()
 
 	if dbConn.Migrator().HasTable(&model.Vtuber{}) {
-		dbConn.Migrator().DropTable(&model.Vtuber{}, &model.Group{}, &model.Membership{})
+		dbConn.Migrator().DropTable(
+			&model.Vtuber{},
+			&model.Group{},
+			"memberships",
+		)
 	}
-	dbConn.AutoMigrate(&model.Vtuber{}, &model.Group{}, &model.Membership{})
+
+	dbConn.AutoMigrate(
+		&model.Vtuber{},
+		&model.Group{},
+	)
 }

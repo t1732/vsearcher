@@ -26,35 +26,35 @@ func main() {
 	dbConn.Create(
 		&model.Group{
 			Name: "Re:AcT",
-			Memberships: []model.Membership{
-				{Vtuber: model.Vtuber{Name: "かしこまり"}},
+			Vtubers: []model.Vtuber{
+				{Name: "かしこまり"},
 			},
 		},
 	)
 	dbConn.Create(
 		&model.Group{
 			Name: "おめがシスターズ",
-			Memberships: []model.Membership{
-				{Vtuber: model.Vtuber{Name: "おめがレイ"}},
-				{Vtuber: model.Vtuber{Name: "おめがリオ"}},
+			Vtubers: []model.Vtuber{
+				{Name: "おめがレイ"},
+				{Name: "おめがリオ"},
 			},
 		},
 	)
 	dbConn.Create(
 		&model.Group{
 			Name: "にじさんじ",
-			Memberships: []model.Membership{
-				{Vtuber: model.Vtuber{Name: "月ノ美兎"}},
-				{Vtuber: model.Vtuber{Name: "本間ひまわり"}},
+			Vtubers: []model.Vtuber{
+				{Name: "月ノ美兎"},
+				{Name: "本間ひまわり"},
 			},
 		},
 	)
 	dbConn.Create(
 		&model.Group{
 			Name: "ホロライブ",
-			Memberships: []model.Membership{
-				{Vtuber: model.Vtuber{Name: "ときのそら"}},
-				{Vtuber: model.Vtuber{Name: "兎田ぺこら"}},
+			Vtubers: []model.Vtuber{
+				{Name: "ときのそら"},
+				{Name: "兎田ぺこら"},
 			},
 		},
 	)
