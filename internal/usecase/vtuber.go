@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	"github.com/t1732/vsercher/internal/domain/model"
-	"github.com/t1732/vsercher/internal/domain/repository"
+	"github.com/t1732/vsearcher/internal/domain/model"
+	"github.com/t1732/vsearcher/internal/domain/repository"
 )
 
 type Vtuber interface {

@@ -10,9 +10,9 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/t1732/vsercher/internal/config"
-	lgg "github.com/t1732/vsercher/internal/config/logger"
-	"github.com/t1732/vsercher/internal/interfaces/routes"
+	"github.com/t1732/vsearcher/internal/config"
+	lgg "github.com/t1732/vsearcher/internal/config/logger"
+	"github.com/t1732/vsearcher/internal/interfaces/routes"
 	"gorm.io/gorm/logger"
 )
 
@@ -24,9 +24,9 @@ func main() {
 	log.Println("running gin server " + port + " port")
 
 	lgCnf := lgg.MysqlConfig{
-		IsFile:   gin.Mode() == gin.DebugMode,
+		IsFile: gin.Mode() == gin.DebugMode,
 	}
-	if (gin.Mode() == gin.DebugMode) {
+	if gin.Mode() == gin.DebugMode {
 		lgCnf.LogLevel = logger.Info
 	}
 	dbConn, err := config.NewDB(lgCnf)

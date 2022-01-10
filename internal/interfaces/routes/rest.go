@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/t1732/vsercher/internal/interfaces/handler/rest"
-	"github.com/t1732/vsercher/internal/registry"
+	"github.com/t1732/vsearcher/internal/interfaces/handler/rest"
+	"github.com/t1732/vsearcher/internal/registry"
 	"gorm.io/gorm"
 )
 

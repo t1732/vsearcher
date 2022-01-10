@@ -1,4 +1,4 @@
-module github.com/t1732/vsercher
+module github.com/t1732/vsearcher
 
 go 1.17
 

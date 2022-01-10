@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/imdario/mergo"
-	lgg "github.com/t1732/vsercher/internal/config/logger"
+	lgg "github.com/t1732/vsearcher/internal/config/logger"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"

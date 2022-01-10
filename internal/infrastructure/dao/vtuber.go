@@ -1,7 +1,7 @@
 package dao
 
 import (
-	"github.com/t1732/vsercher/internal/domain/model"
+	"github.com/t1732/vsearcher/internal/domain/model"
 	"gorm.io/gorm"
 )
 

@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/t1732/vsercher/internal/config"
-	lgg "github.com/t1732/vsercher/internal/config/logger"
-	"github.com/t1732/vsercher/internal/domain/model"
+	"github.com/t1732/vsearcher/internal/config"
+	lgg "github.com/t1732/vsearcher/internal/config/logger"
+	"github.com/t1732/vsearcher/internal/domain/model"
 	"gorm.io/gorm/logger"
 )
 

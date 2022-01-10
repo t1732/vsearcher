@@ -1,6 +1,6 @@
 package repository
 
-import "github.com/t1732/vsercher/internal/domain/model"
+import "github.com/t1732/vsearcher/internal/domain/model"
 
 type Vtuber interface {
 	All() (*[]model.Vtuber, error)

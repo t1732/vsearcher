@@ -1,8 +1,8 @@
 package registry
 
 import (
-	"github.com/t1732/vsercher/internal/domain/repository"
-	"github.com/t1732/vsercher/internal/infrastructure/dao"
+	"github.com/t1732/vsearcher/internal/domain/repository"
+	"github.com/t1732/vsearcher/internal/infrastructure/dao"
 	"gorm.io/gorm"
 )
 
