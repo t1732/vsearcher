@@ -32,7 +32,7 @@ func init() {
 }
 
 func NewDB() (*gorm.DB, error) {
-	config := dbConfig{
+	dbConfig := dbConfig{
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASS"),
 		os.Getenv("DB_HOST"),
@@ -45,7 +45,7 @@ func NewDB() (*gorm.DB, error) {
 	}
 
 	var b bytes.Buffer
-	if err = t.Execute(&b, config); err != nil {
+	if err = t.Execute(&b, dbConfig); err != nil {
 		return nil, err
 	}
 
@@ -68,7 +68,7 @@ func NewDB() (*gorm.DB, error) {
 }
 
 func newLogger() (logger.Interface, error) {
-	file, err := os.OpenFile(RootPath+"/log/gorm.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	file, err := os.OpenFile(App.RootPath.Join("/log/gorm.log"), os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		return nil, err
 	}
