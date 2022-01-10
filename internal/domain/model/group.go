@@ -2,8 +2,8 @@ package model
 
 import "gorm.io/gorm"
 
-type Vtuber struct {
+type Group struct {
 	gorm.Model
-	Name string `gorm:"size:30,uniqueIndex"`
+	Name        string `gorm:"site:30,uniqueIndex"`
 	Memberships []Membership
 }

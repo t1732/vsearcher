@@ -56,18 +56,48 @@ func NewDB() (*gorm.DB, error) {
 }
 
 func Migrate(conn *gorm.DB) {
-	conn.AutoMigrate(&model.Vtuber{})
+	if conn.Migrator().HasTable(&model.Vtuber{}) {
+		conn.Migrator().DropTable(&model.Vtuber{}, &model.Group{}, &model.Membership{})
+	}
+	conn.AutoMigrate(&model.Vtuber{}, &model.Group{}, &model.Membership{})
 }
 
 func Seed(conn *gorm.DB) {
-	if conn.Migrator().HasTable(&model.Vtuber{}) {
-		conn.Migrator().DropTable(&model.Vtuber{})
-	}
-	conn.Migrator().CreateTable(&model.Vtuber{})
 	conn.Create(&model.Vtuber{Name: "キズナアイ"})
-	conn.Create(&model.Vtuber{Name: "かしこまり"})
-	conn.Create(&model.Vtuber{Name: "おめがシスターズ"})
-	conn.Create(&model.Vtuber{Name: "兎田ぺこら"})
-	conn.Create(&model.Vtuber{Name: "本間ひまわり"})
 	conn.Create(&model.Vtuber{Name: "兎鞠まり"})
+	conn.Create(
+		&model.Group{
+			Name: "Re:AcT",
+			Memberships: []model.Membership{
+				{Vtuber: model.Vtuber{Name: "かしこまり"}},
+			},
+		},
+	)
+	conn.Create(
+		&model.Group{
+			Name: "おめがシスターズ",
+			Memberships: []model.Membership{
+				{Vtuber: model.Vtuber{Name: "おめがレイ"}},
+				{Vtuber: model.Vtuber{Name: "おめがリオ"}},
+			},
+		},
+	)
+	conn.Create(
+		&model.Group{
+			Name: "にじさんじ",
+			Memberships: []model.Membership{
+				{Vtuber: model.Vtuber{Name: "月ノ美兎"}},
+				{Vtuber: model.Vtuber{Name: "本間ひまわり"}},
+			},
+		},
+	)
+	conn.Create(
+		&model.Group{
+			Name: "ホロライブ",
+			Memberships: []model.Membership{
+				{Vtuber: model.Vtuber{Name: "ときのそら"}},
+				{Vtuber: model.Vtuber{Name: "兎田ぺこら"}},
+			},
+		},
+	)
 }
