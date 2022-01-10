@@ -20,7 +20,10 @@ func NewVtuber(dbConn *gorm.DB) Vtuber {
 
 func (v *vtuberImpl) All() (*[]model.Vtuber, error) {
 	var vtubers []model.Vtuber
-	if err := v.dbConn.Preload("Groups").Find(&vtubers).Error; err != nil {
+
+	if err := v.dbConn.Preload("Groups", func(db *gorm.DB) *gorm.DB {
+	 	return db.Select("ID", "Name")
+	}).Select("ID", "Name").Order("id desc").Find(&vtubers).Error; err != nil {
 		return nil, err
 	}
 
